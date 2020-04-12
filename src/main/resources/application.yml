@@ -45,8 +45,8 @@ mybatis:
   type-aliases-package: com.mtli.model.pojo
   mapper-locations: mapper/*.xml
   ### 打印sql
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   level:
