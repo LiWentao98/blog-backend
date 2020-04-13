@@ -19,6 +19,11 @@ public class AnnouncementService {
     @Autowired
     DateUtil dateUtil;
 
+    /**
+     * 保存公告
+     * @param announcementTitle
+     * @param announcementBody
+     */
     public void saveAnnouncement(String announcementTitle, String announcementBody) {
         announcementBody = announcementBody.replaceAll("\n", "<br/>");
         Announcement announcement = new Announcement();

@@ -7,7 +7,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @MapperScan(value = "com.mtli.dao")
 @EnableSwagger2
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.mtli"})
 public class BlogBackendApplication {
 
     public static void main(String[] args) {

@@ -33,6 +33,25 @@ spring:
             enable: true
             required: true
 
+  ###Redis
+  redis:
+    host: 192.168.153.128
+    port: 6379
+    timeout: 2000ms
+    password: 19981020 #密码
+    jedis:
+      pool:
+        max-active: 10
+        max-idle: 8
+        min-idle: 2
+        max-wait: 1000ms
+  ###RabbitMQ
+  rabbitmq:
+    host: 192.168.153.128
+    port: 5672
+    username: guest
+    password: guest
+
 swagger:
   basePackage: com.mtli.controller
   title: blogAPI
@@ -53,3 +72,16 @@ logging:
     org.springframework.security: info
     root: info
   path: e:/log/blog-backend-log
+
+
+
+### jwt
+jwt:
+  ###过期时间 s数432000 5天
+  time: 432000
+  ###安全密钥
+  secret: "BlogSecret"
+  ###token前缀
+  prefix: "Bearer "
+  ###http头key
+  header: "Authorization"
