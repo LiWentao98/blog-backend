@@ -1,7 +1,10 @@
 package com.mtli.dao;
 
 import com.mtli.model.pojo.Announcement;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Description:
@@ -32,5 +35,10 @@ public interface AnnouncementDao {
 
     /**
      * 分页查询公告
+     *
+     * @param start
+     * @param showCount
+     * @return
      */
+    List<Announcement> findAnnouncement(@Param("start") Integer start, @Param("showCount") Integer showCount);
 }

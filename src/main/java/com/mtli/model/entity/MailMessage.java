@@ -2,11 +2,13 @@ package com.mtli.model.entity;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Component;
 
 /**
  * @Description: 对SimpleMailMessage进行封装
  * @Author: Mt.Li
  */
+@Component
 public class MailMessage {
 
     // 注入配置文件的username值

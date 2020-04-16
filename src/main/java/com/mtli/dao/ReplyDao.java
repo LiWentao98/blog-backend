@@ -40,4 +40,11 @@ public interface ReplyDao {
      * @return 受影响行数
      */
     Integer deleteReplyByDiscussId(Integer discussId);
+
+    /**
+     * 删除回复后，删除其子回复
+     * @param rootId
+     * @return
+     */
+    Integer deleteSonReplyById(Integer rootId);
 }

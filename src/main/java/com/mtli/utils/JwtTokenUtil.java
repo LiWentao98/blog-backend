@@ -50,6 +50,7 @@ public class JwtTokenUtil implements Serializable {
         String username;
         try {
             final Claims claims = getClaimsFromToken(token);
+            // key为“sub”
             username = claims.getSubject();
         } catch (Exception e) {
             username = null;

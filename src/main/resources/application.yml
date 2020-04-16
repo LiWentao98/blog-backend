@@ -85,3 +85,20 @@ jwt:
   prefix: "Bearer "
   ###http头key
   header: "Authorization"
+###图片上传配置
+upload:
+  #静态资源对外暴露的访问路径 一个* 代表只匹配该路径下的一级子路径
+  staticAccessPath: /img/*
+  #文件上传目录
+  uploadFolder: E:/uploadStatic/blog
+  #文件夹层数
+  layerCount: 2
+  #文件夹内单位数
+  folderSize: 16
+
+###站点介绍
+site:
+  introduction: "TTS博客网站"
+
+server:
+  port: 8001
