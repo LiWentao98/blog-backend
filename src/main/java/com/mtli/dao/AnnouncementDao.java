@@ -10,6 +10,7 @@ import java.util.List;
  * @Description:
  * @Author: Mt.Li
  */
+
 @Repository
 public interface AnnouncementDao {
 

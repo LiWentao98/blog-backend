@@ -23,7 +23,6 @@ public class MessageController {
     @Autowired
     private FormatUtil formatUtil;
 
-
     @ApiOperation(value = "留言", notes = "留言内容")
     @PostMapping
     public Result message(String messageBody) {

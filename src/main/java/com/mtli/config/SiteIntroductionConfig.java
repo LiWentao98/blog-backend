@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 /**
  * 站点介绍
  */
+
 @ConfigurationProperties(prefix = "site")
 @Component
 public class SiteIntroductionConfig {

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface RoleDao {
+
     /**
      * 根据用户id查询角色
      * @param id

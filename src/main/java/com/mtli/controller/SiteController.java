@@ -18,13 +18,10 @@ public class SiteController {
     @Autowired
     private SiteIntroductionConfig siteIntroductionConfig;
 
-
     @ApiOperation(value = "站点介绍", notes = "站点介绍")
     @GetMapping
     public Result getIntroduction() {
 
         return Result.create(StatusCode.OK, "获取成功", siteIntroductionConfig.getIntroduction());
     }
-
-
 }

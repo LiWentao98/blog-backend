@@ -2,6 +2,7 @@ package com.mtli.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mtli.config.ImgUploadConfig;
 import com.mtli.config.RabbitMqConfig;
 import com.mtli.config.RedisConfig;
 import com.mtli.dao.BlogDao;
@@ -17,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -28,7 +31,6 @@ import java.util.Map;
 /**
  * @Description:
  * @Author: Mt.Li
- * @Create: 2020-04-14 21:23
  */
 @Service
 public class BlogService {
@@ -69,8 +71,11 @@ public class BlogService {
     @Autowired
     private ObjectMapper objectMapper;
 
-//    @Autowired
-//    private ImgUploadConfig imgUploadConfig;
+    @Autowired
+    private ImgUploadConfig imgUploadConfig;
+
+    @Autowired
+    private FileUtil fileUtil;
 
     @Autowired
     private HttpServletRequest request;
@@ -155,6 +160,31 @@ public class BlogService {
             blog.getUser().setState(null);
             redisTemplate.opsForValue().set(RedisConfig.REDIS_BLOG_PREFIX + blog.getId(), objectMapper.writeValueAsString(blog));
         }
+    }
+
+    /**
+     * 保存图片,返回url
+     *
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public synchronized String saveImg(MultipartFile file) throws IOException {
+
+        //获取图片格式/后缀
+        String format = formatUtil.getFileFormat(file.getOriginalFilename());
+        //获取图片保存路径
+        String savePath = fileUtil.getSavePath();
+        //存储已满
+        if (!formatUtil.checkStringNull(savePath)) {
+            throw new IOException("存储已满 请联系管理员");
+        }
+        //保存图片
+        String fileName = uuidUtil.generateUUID() + format;
+        File diskFile = new File(savePath + "/" + fileName);
+        file.transferTo(diskFile);
+        //将硬盘路径转换为url，返回
+        return imgUploadConfig.getStaticAccessPath().replaceAll("\\*", "") + fileName;
     }
 
     /**

@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/announcement")
 public class AnnouncementController {
+
     @Autowired
     private AnnouncementService announcementService;
 
     @Autowired
     private FormatUtil formatUtil;
-
 
     /**
      * 发布公告

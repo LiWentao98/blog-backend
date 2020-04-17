@@ -209,6 +209,7 @@ public class UserService implements UserDetailsService {
         redisTemplate.opsForValue()
                 .set(MailConfig.REDIS_MAIL_KEY_PREFIX + mail, code, MailConfig.EXPIRED_TIME, TimeUnit.MINUTES);
 
+        // 转交给队列处理
         rabbitTemplate.convertAndSend(RabbitMqConfig.MAIL_QUEUE, map);
 
     }
@@ -421,6 +422,64 @@ public class UserService implements UserDetailsService {
      */
     public Long getUserCountByName(String userName) {
         return userDao.getUserCountByName(userName);
+    }
+
+    /**
+     * 获取用户打赏码
+     *
+     * @return
+     */
+    public String findUserReward() {
+        User user = userDao.findUserByName(jwtTokenUtil.getUsernameFromRequest(request));
+        return user.getReward();
+    }
+
+    /**
+     * 更改用户打赏码
+     *
+     * @param imgPath
+     */
+    public void updateUserReward(String imgPath) {
+        User user = userDao.findUserByName(jwtTokenUtil.getUsernameFromRequest(request));
+        user.setReward(imgPath);
+        userDao.updateUser(user);
+    }
+
+    /**
+     * 更新用户邮箱
+     *
+     * @param newMail     新邮箱
+     * @param oldMailCode 旧邮箱验证码
+     * @param newMailCode 新邮箱验证码
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateUserMail(String newMail, String oldMailCode, String newMailCode) {
+
+        // 获取向旧邮箱发出的验证码
+        String userName = jwtTokenUtil.getUsernameFromRequest(request);
+        User user = userDao.findUserByName(userName);
+
+        // 与用户输入的旧邮箱验证码进行匹配
+        if (!checkMailCode(user.getMail(), oldMailCode)) {
+            throw new RuntimeException("旧邮箱无效验证码");
+        }
+
+        //检查新邮箱是否已存在
+        if (userDao.findUserByMail(newMail) != null) {
+            throw new RuntimeException("此邮箱已使用");
+        }
+
+
+        //校验新邮箱验证码
+        if (!checkMailCode(newMail, newMailCode)) {
+            throw new RuntimeException("新邮箱无效验证码");
+        }
+
+
+        user.setMail(newMail);
+        //更新用户邮箱信息
+        userDao.updateUser(user);
+
     }
 
 }

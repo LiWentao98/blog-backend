@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
  *
  * @blame mqpearh
  */
+
 @Component
 @RabbitListener(queues = RabbitMqConfig.BLOG_QUEUE)
 public class BlogListener {

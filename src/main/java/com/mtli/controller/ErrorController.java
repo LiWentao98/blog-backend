@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class ErrorController {
 
-
     public static final String FREQUENT_OPERATION = "/frequentOperation";
 
     @Autowired

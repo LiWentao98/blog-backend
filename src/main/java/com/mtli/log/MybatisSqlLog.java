@@ -87,7 +87,6 @@ public class MybatisSqlLog implements Interceptor {
             } else {
                 value = "";
             }
-
         }
         return value;
     }
@@ -130,7 +129,6 @@ public class MybatisSqlLog implements Interceptor {
         }
         return sql;
     }
-
 
     @Override
     public Object plugin(Object target) {

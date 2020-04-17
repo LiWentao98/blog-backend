@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LoginDao {
 
-
     /**
      * 根据用户id删除登录记录
      * @param id

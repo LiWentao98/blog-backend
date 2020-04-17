@@ -26,10 +26,6 @@ public interface UserDao {
      */
     void saveUser(User user);
 
-
-
-
-
     /**
      * 根据邮箱查询用户
      *

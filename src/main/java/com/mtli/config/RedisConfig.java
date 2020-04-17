@@ -3,7 +3,6 @@ package com.mtli.config;
 /**
  * 配置redis的存取
  *
- * @blame mqpearth
  */
 public class RedisConfig {
 

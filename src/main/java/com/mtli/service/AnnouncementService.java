@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 public class AnnouncementService {
+
     @Autowired
     private AnnouncementDao announcementDao;
 
@@ -36,7 +37,6 @@ public class AnnouncementService {
         announcementDao.deleteAnnouncementById(announcementId);
     }
 
-
     /**
      * 置顶或取消置顶公告
      *
@@ -49,7 +49,6 @@ public class AnnouncementService {
         announcement.setTop(top);
         announcementDao.updateAnnouncementTop(announcement);
     }
-
 
     /**
      * 获取公告数量

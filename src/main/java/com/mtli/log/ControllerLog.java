@@ -17,7 +17,6 @@ import java.util.Arrays;
 @Component
 public class ControllerLog {
 
-
     @Autowired
     private HttpServletRequest request;
 
@@ -29,7 +28,6 @@ public class ControllerLog {
     @Pointcut("execution(public * com.mtli.controller.*.*(..))")
     public void log() {
     }
-
 
     /**
      * 方法执行前后 拦截
@@ -57,7 +55,6 @@ public class ControllerLog {
 
         logger.info(builder.toString());
         return obj;
-
     }
 
 

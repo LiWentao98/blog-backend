@@ -1,6 +1,7 @@
 package com.mtli.controller;
 
 import com.mtli.config.MailConfig;
+import com.mtli.model.entity.PageResult;
 import com.mtli.model.entity.Result;
 import com.mtli.model.entity.StatusCode;
 import com.mtli.model.pojo.User;
@@ -19,7 +20,6 @@ import java.util.Map;
 /**
  * @Description:
  * @Author: Mt.Li
- * @Create: 2020-04-13 10:45
  */
 
 @Api(tags = "用户api", description = "用户api", basePath = "/user")
@@ -101,7 +101,11 @@ public class UserController {
 
     /**
      * 发送邮件验证码
+     *
+     * @param mail
+     * @return
      */
+    @ApiOperation(value = "发送验证邮件", notes = "mail 冷却五分钟")
     @PostMapping("/sendMail")
     public Result sendMail(String mail) {
         //邮箱格式校验
@@ -119,6 +123,34 @@ public class UserController {
 
             return Result.create(StatusCode.OK, "发送成功");
         }
+    }
+
+    /**
+     * 获取用户的打赏码
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取用户的打赏码", notes = "获取用户的打赏码")
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/getReward")
+    public Result getUserReward() {
+        return Result.create(StatusCode.OK, "查询成功", userService.findUserReward());
+    }
+
+    /**
+     * 更新用户打赏码
+     *
+     * @return
+     */
+    @ApiOperation(value = "更新用户打赏码", notes = "更新用户打赏码")
+    @PreAuthorize("hasAuthority('USER')")
+    @PutMapping("/updateReward")
+    public Result updateReward(String imgPath) {
+        if (!formatUtil.checkStringNull(imgPath)) {
+            return Result.create(StatusCode.ERROR, "格式错误");
+        }
+        userService.updateUserReward(imgPath);
+        return Result.create(StatusCode.OK, "更新成功");
     }
 
     /**
@@ -173,41 +205,110 @@ public class UserController {
         }
     }
 
-    //以下是权限测试方法
-
-    //    @ApiOperation(value = "游客权限测试", notes = "测试")
-//    @GetMapping
-//    public Result test() {
-//        return Result.create(StatusCode.OK, "游客");
-//    }
-//
-//
-//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-//    @GetMapping("/adminoruser")
-//    public Result adminoruser() {
-//        return Result.create(StatusCode.OK, "管理员 或 用户");
-//    }
-//
-    @PreAuthorize("hasAuthority('ADMIN') AND hasAnyAuthority('USER')")
-    @GetMapping("/adminanduser")
-    public String adminanduser() {
-        return "管理员 且 用户";
+    /**
+     * 修改密码
+     *
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @param code        邮箱验证码
+     * @return
+     */
+    @ApiOperation(value = "用户修改密码", notes = "旧密码+新密码+验证码")
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping("/updatePassword")
+    public Result updatePassword(String oldPassword, String newPassword, String code) {
+        if (!formatUtil.checkStringNull(oldPassword, newPassword, code)) {
+            return Result.create(StatusCode.ERROR, "参数错误");
+        }
+        try {
+            userService.updateUserPassword(oldPassword, newPassword, code);
+            return Result.create(StatusCode.OK, "修改密码成功");
+        } catch (RuntimeException e) {
+            return Result.create(StatusCode.ERROR, e.getMessage());
+        }
     }
-//
-//    @ApiOperation(value = "管理员权限测试", notes = "测试")
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    @GetMapping("/admin")
-//    public Result admin() {
-//        return Result.create(StatusCode.OK, "管理员");
-//    }
-//
-//
-//    @PreAuthorize("hasAnyAuthority('USER')")
-//    @GetMapping("/user")
-//    public Result user() {
-//        return Result.create(StatusCode.OK, "用户");
-//    }
 
+    /**
+     * 获取用户绑定的邮箱
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取用户绑定的邮箱", notes = "获取用户绑定的邮箱")
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/mail")
+    public Result getUserMail() {
+        return Result.create(StatusCode.OK, "查询成功", userService.findUserMail());
+    }
 
+    /**
+     * 改绑邮箱
+     *
+     * @param newMail     新邮箱
+     * @param oldMailCode 旧邮箱验证码
+     * @param newMailCode 新邮箱验证码
+     * @return
+     */
+    @ApiOperation(value = "改绑邮箱", notes = "新邮箱+旧邮箱验证码+新邮箱验证码")
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping("/updateMail")
+    public Result updateMail(String newMail, String oldMailCode, String newMailCode) {
+        if (!formatUtil.checkStringNull(newMail, oldMailCode, newMailCode)) {
+            return Result.create(StatusCode.ERROR, "参数错误");
+        }
+        //检查邮箱格式
+        if (!formatUtil.checkMail(newMail)) {
+            return Result.create(StatusCode.ERROR, "参数错误");
+        }
+        try {
+            userService.updateUserMail(newMail, oldMailCode, newMailCode);
+            return Result.create(StatusCode.OK, "改绑成功");
+        } catch (RuntimeException e) {
+            return Result.create(StatusCode.ERROR, e.getMessage());
+        }
+    }
+
+    /**
+     * 分页查询用户
+     *
+     * @param page
+     * @param showCount
+     * @return
+     */
+    @ApiOperation(value = "分页查询用户", notes = "页码+显示数量")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/{page}/{showCount}")
+    public Result findUser(@PathVariable Integer page, @PathVariable Integer showCount) {
+        if (!formatUtil.checkPositive(page, showCount)) {
+            return Result.create(StatusCode.ERROR, "参数错误");
+        }
+        PageResult<User> pageResult =
+                new PageResult<>(userService.getUserCount(), userService.findUser(page, showCount));
+        return Result.create(StatusCode.OK, "查询成功", pageResult);
+    }
+
+    /**
+     * 根据用户名分页搜索用户
+     *
+     * @param userName
+     * @param page
+     * @param showCount
+     * @return
+     */
+    @ApiOperation(value = "根据用户名分页搜索用户", notes = "页码+显示数量+搜索内容")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/search/{page}/{showCount}")
+    public Result searchUser(String userName, @PathVariable Integer page, @PathVariable Integer showCount) {
+        if (!formatUtil.checkStringNull(userName)) {
+            return Result.create(StatusCode.ERROR, "参数错误");
+        }
+        if (!formatUtil.checkPositive(page, showCount)) {
+            return Result.create(StatusCode.ERROR, "参数错误");
+        }
+        PageResult<User> pageResult =
+                new PageResult<>(userService.getUserCountByName(userName), userService.searchUserByName(userName, page, showCount));
+
+        return Result.create(StatusCode.OK, "查询成功", pageResult);
+
+    }
 }
 

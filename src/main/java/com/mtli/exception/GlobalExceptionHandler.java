@@ -21,7 +21,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
     /**
      * 找不到资源 -> com.mtli.config.ErrorConfig
      * 未找到处理器 异常

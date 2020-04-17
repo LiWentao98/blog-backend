@@ -25,8 +25,6 @@ public class MailListener {
 
     private Logger logger = LoggerUtil.loggerFactory(this.getClass());
 
-
-
     @Autowired
     private JavaMailSender mailSender;
 
@@ -40,7 +38,6 @@ public class MailListener {
     public void executeSms(Map<String, String> map) {
         String mail = map.get("mail");
         String code = map.get("code");
-
 
         try {
             this.sendMail(mail, code);

@@ -50,8 +50,6 @@ public class BlogTask {
         } catch (JsonProcessingException e) {
             logger.error("热门博客列表更新失败");
         }
-
-
     }
 
     /**

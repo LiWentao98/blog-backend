@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -26,6 +27,10 @@ import java.io.IOException;
 @RequestMapping("/blog")
 public class BlogController {
 
+    private static final String IMAGE_JPG = ".jpg";
+
+    private static final String IMAGE_PNG = ".png";
+
     @Autowired
     private BlogService blogService;
 
@@ -34,6 +39,7 @@ public class BlogController {
 
     /**
      * 发布新博文
+     *
      * @param blogTitle
      * @param blogBody
      * @param tagId
@@ -51,6 +57,36 @@ public class BlogController {
             return Result.create(StatusCode.OK, "发布成功");
         } catch (IOException e) {
             return Result.create(StatusCode.ERROR, "非法操作");
+        }
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "上传图片", notes = "图片")
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping("/uploadImg")
+    public Result uploadImg(MultipartFile file) {
+        if (!formatUtil.checkObjectNull(file)) {
+            return Result.create(StatusCode.ERROR, "参数错误");
+        }
+        String fileFormat = formatUtil.getFileFormat(file.getOriginalFilename());
+
+        if (null == fileFormat) {
+            return Result.create(StatusCode.ERROR, "图片缺少格式");
+        }
+
+        if (!IMAGE_JPG.equals(fileFormat.toLowerCase()) && !IMAGE_PNG.equals(fileFormat.toLowerCase())) {
+            return Result.create(StatusCode.ERROR, "图片格式错误");
+        }
+        try {
+            String url = blogService.saveImg(file);
+            return Result.create(StatusCode.OK, "上传成功", url);
+        } catch (IOException ioe) {
+            return Result.create(StatusCode.ERROR, "上传失败" + ioe.getMessage());
         }
     }
 
@@ -112,8 +148,6 @@ public class BlogController {
         if (!formatUtil.checkPositive(page, showCount) || showCount > RedisConfig.REDIS_NEW_BLOG_COUNT) {
             return Result.create(StatusCode.OK, "参数错误");
         }
-
-
         try {
             PageResult<Blog> pageResult = new PageResult<>(blogService.getHomeBlogCount(), blogService.findHomeBlog(page, showCount));
             return Result.create(StatusCode.OK, "查询成功", pageResult);
@@ -262,6 +296,7 @@ public class BlogController {
 
     /**
      * 管理员分页搜索博文
+     *
      * @param search
      * @param page
      * @param showCount
