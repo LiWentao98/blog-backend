@@ -110,7 +110,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result exceptionHandler(Exception e) {
- //       e.printStackTrace();
+        e.printStackTrace();
         return Result.create(StatusCode.SERVICEERROR, "服务异常 请联系管理员");
     }
 

@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://47.115.37.98:3306/blog?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
     username: root
-    password: root
+    password: 123456
     driverClassName: com.mysql.cj.jdbc.Driver
     druid:
       # 初始化大小，最小，最大
@@ -35,7 +35,7 @@ spring:
 
   ###Redis
   redis:
-    host: 192.168.153.128
+    host: 47.115.37.98
     port: 6379
     timeout: 2000ms
     password: 19981020 #密码
@@ -47,7 +47,7 @@ spring:
         max-wait: 1000ms
   ###RabbitMQ
   rabbitmq:
-    host: 192.168.153.128
+    host: 47.115.37.98
     port: 5672
     username: guest
     password: guest
@@ -71,7 +71,7 @@ logging:
   level:
     org.springframework.security: info
     root: info
-  path: e:/log/blog-backend-log
+  path: /log/blogLog
 
 
 
@@ -90,7 +90,7 @@ upload:
   #静态资源对外暴露的访问路径 一个* 代表只匹配该路径下的一级子路径
   staticAccessPath: /img/*
   #文件上传目录
-  uploadFolder: E:/uploadStatic/blog
+  uploadFolder: /uploadStatic/blog
   #文件夹层数
   layerCount: 2
   #文件夹内单位数
