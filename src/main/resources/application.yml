@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
-    username: root
-    password: root
+    url: ENC(PBhKKEX9LE/KzgJl17ON3/7kU/qd9nZrQQghXJu9heQ88eNugX/LYisip7dL6x9gZoRcP5r9qEynwcwLrTkcKwDmqdnq6wM2BofyeybPB8zZ605wE41V414JcP0Ti90jh9G4EmsfvQNkkdqGUu5bLw==)
+    username: ENC(QWqpDIrEuBnP4lZqqZ63Kw==)
+    password: ENC(60UcXwa7A7PubDo64IcaSQ==)
     driverClassName: com.mysql.cj.jdbc.Driver
     druid:
       # 初始化大小，最小，最大
@@ -22,8 +22,8 @@ spring:
   mail:
     host: smtp.qq.com
     port: 25
-    username: 1340420560@qq.com
-    password: jkwvtrefqugoibeh
+    username: ENC(aPRDvMzi7+wqW/bkvQ42l3hB8jTjWOFsXSZ5mz5kigE=)
+    password: ENC(kYiHKTLgN0kAgyRqC0we8OY/F5LlIo8Kzh71vBB7pG4=)
     default-encoding: UTF-8
     properties:
       mail:
@@ -35,10 +35,10 @@ spring:
 
   ###Redis
   redis:
-    host: 47.115.37.98
+    host: ENC(ZIbp1lztr7QwblfPOSTKnVC1ZzpiYwAH)
     port: 6379
     timeout: 2000ms
-    password: 19981020 #密码
+    password: ENC(laIe+k8ZSuMgSUPcuE+k9m0+/gsEFZNQ)
     jedis:
       pool:
         max-active: 10
@@ -47,11 +47,15 @@ spring:
         max-wait: 1000ms
   ###RabbitMQ
   rabbitmq:
-    host: 47.115.37.98
+    host: ENC(ZIbp1lztr7QwblfPOSTKnVC1ZzpiYwAH)
     port: 5672
     username: guest
     password: guest
 
+## 秘钥
+jasypt:
+  encryptor:
+    password: NcWcncWcBcLWTlxf1998Or1997JVMXmxJkl
 swagger:
   basePackage: com.mtli.controller
   title: blogAPI
