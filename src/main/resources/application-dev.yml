@@ -1,0 +1,108 @@
+spring:
+  datasource:
+    url: ENC(PBhKKEX9LE/KzgJl17ON3/7kU/qd9nZrQQghXJu9heQ88eNugX/LYisip7dL6x9gZoRcP5r9qEynwcwLrTkcKwDmqdnq6wM2BofyeybPB8zZ605wE41V414JcP0Ti90jh9G4EmsfvQNkkdqGUu5bLw==)
+    username: ENC(QWqpDIrEuBnP4lZqqZ63Kw==)
+    password: ENC(60UcXwa7A7PubDo64IcaSQ==)
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      # 初始化大小，最小，最大
+      initial-size: 5
+      max-active: 20
+      min-idle: 5
+      max-wait: 60000 # 配置获取连接等待超时的时间
+      validation-query: SELECT 1 # 验证连接
+      validation-query-timeout: 2000
+
+  ### 让404抛出NoHandlerFoundException
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  ### 邮箱配置
+  mail:
+    host: smtp.qq.com
+    port: 25
+    username: ENC(aPRDvMzi7+wqW/bkvQ42l3hB8jTjWOFsXSZ5mz5kigE=)
+    password: ENC(kYiHKTLgN0kAgyRqC0we8OY/F5LlIo8Kzh71vBB7pG4=)
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+  ###Redis
+  redis:
+    host: ENC(ZIbp1lztr7QwblfPOSTKnVC1ZzpiYwAH)
+    port: 6379
+    timeout: 2000ms
+    password: ENC(laIe+k8ZSuMgSUPcuE+k9m0+/gsEFZNQ)
+    jedis:
+      pool:
+        max-active: 10
+        max-idle: 8
+        min-idle: 2
+        max-wait: 1000ms
+  ###RabbitMQ
+  rabbitmq:
+    host: ENC(ZIbp1lztr7QwblfPOSTKnVC1ZzpiYwAH)
+    port: 5672
+    username: guest
+    password: guest
+
+## 秘钥
+jasypt:
+  encryptor:
+    password: NcWcncWcBcLWTlxf1998Or1997JVMXmxJkl
+swagger:
+  basePackage: com.mtli.controller
+  title: blogAPI
+  description: none
+  version: V1.0
+
+
+mybatis:
+  ### 数据库模型对象
+  type-aliases-package: com.mtli.model.pojo
+  mapper-locations: mapper/*.xml
+  ### 打印sql
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    org.springframework.security: info
+    root: info
+  path: E:/log/blog-backend_v1.1
+
+
+
+### jwt
+jwt:
+  ###过期时间 s数432000 5天
+  time: 432000
+  ###安全密钥
+  secret: "BlogSecret"
+  ###token前缀
+  prefix: "Bearer "
+  ###http头key
+  header: "Authorization"
+###图片上传配置
+upload:
+  #静态资源对外暴露的访问路径 一个* 代表只匹配该路径下的一级子路径
+  staticAccessPath: /img/*
+  #文件上传目录
+  uploadFolder: /uploadStatic/blog
+  #文件夹层数
+  layerCount: 2
+  #文件夹内单位数
+  folderSize: 16
+
+###站点介绍
+site:
+  introduction: "TTS博客网站"
+
+server:
+  port: 8888
