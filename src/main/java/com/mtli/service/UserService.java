@@ -138,7 +138,6 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("验证码错误");
         }
 
-        //有效
         //查询邀请码是否有效
         Code code = codeDao.findCodeById(inviteCode);
 
