@@ -209,7 +209,7 @@ public class UserService implements UserDetailsService {
                 .set(MailConfig.REDIS_MAIL_KEY_PREFIX + mail, code, MailConfig.EXPIRED_TIME, TimeUnit.MINUTES);
 
         // 转交给队列处理
-        rabbitTemplate.convertAndSend(RabbitMqConfig.MAIL_QUEUE, map);
+        rabbitTemplate.convertAndSend("directExchange",RabbitMqConfig.MAIL_QUEUE, map);
 
     }
 

@@ -10,5 +10,5 @@ public class MailConfig {
     /**
      * redis中 mail code 的过期时间
      */
-    public static final int EXPIRED_TIME = 5;
+    public static final int EXPIRED_TIME = 2;
 }

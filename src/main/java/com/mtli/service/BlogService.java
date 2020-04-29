@@ -222,7 +222,7 @@ public class BlogService {
                 // 有缓存 同步操作redis
                 redisTemplate.opsForValue().set(RedisConfig.REDIS_BLOG_PREFIX + blogId, objectMapper.writeValueAsString(blog));
                 // 异步操作mysql 增加浏览量
-                rabbitTemplate.convertAndSend(RabbitMqConfig.BLOG_QUEUE, blog);
+                rabbitTemplate.convertAndSend("directExchange",RabbitMqConfig.BLOG_QUEUE, blog);
             } else {
                 // 没有缓存 同步操作mysql
                 blogDao.updateBlog(blog);
