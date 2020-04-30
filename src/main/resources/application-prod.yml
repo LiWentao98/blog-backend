@@ -21,17 +21,22 @@ spring:
   ### 邮箱配置
   mail:
     host: smtp.qq.com
-    port: 25
+    port: 465
     username: ENC(nonAx8eNdLTOFa8WZU4pTON7TPbQKWf4WqCpSx6BuN0=)
     password: ENC(l0mxW06L7RkjiIwaM+brRTO8wMaH8Hc3livimyFAIos=)
     default-encoding: UTF-8
     properties:
       mail:
         smtp:
+          ssl:
+            enable: true
+            socketfactory:
+              fallback: false
           auth: true
           starttls:
             enable: true
             required: true
+
 
   ###Redis
   redis:

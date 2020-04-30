@@ -215,7 +215,7 @@ public class UserService implements UserDetailsService {
 
         //保存发送记录
         redisTemplate.opsForValue()
-                .set(MailConfig.REDIS_MAIL_KEY_PREFIX + mail, code, MailConfig.EXPIRED_TIME, TimeUnit.SECONDS);
+                .set(MailConfig.REDIS_MAIL_KEY_PREFIX + mail, code, MailConfig.EXPIRED_TIME, TimeUnit.MINUTES);
 
     }
 
