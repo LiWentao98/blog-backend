@@ -90,6 +90,12 @@ public class UserService implements UserDetailsService {
         // 用户名 密码匹配，获取用户详细信息（包含角色Role）
         final UserDetails userDetails = this.loadUserByUsername(user.getName());
 
+        // System.out.println((JwtConfig.REDIS_TOKEN_KEY_PREFIX + user.getName()).equals(redisTemplate.opsForValue().get(JwtConfig.REDIS_TOKEN_KEY_PREFIX + user.getName())));
+        // 检测用户是否登录
+        if(redisTemplate.hasKey(JwtConfig.REDIS_TOKEN_KEY_PREFIX + user.getName())){
+            throw new RuntimeException("该用户已登录");
+        }
+
         // 根据用户详细信息生成token
         final String token = jwtTokenUtil.generateToken(userDetails);
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
@@ -204,12 +210,12 @@ public class UserService implements UserDetailsService {
         map.put("mail", mail);
         map.put("code", code);
 
-        //保存发送记录
-        redisTemplate.opsForValue()
-                .set(MailConfig.REDIS_MAIL_KEY_PREFIX + mail, code, MailConfig.EXPIRED_TIME, TimeUnit.MINUTES);
-
         // 转交给队列处理
         rabbitTemplate.convertAndSend("directExchange",RabbitMqConfig.MAIL_QUEUE, map);
+
+        //保存发送记录
+        redisTemplate.opsForValue()
+                .set(MailConfig.REDIS_MAIL_KEY_PREFIX + mail, code, MailConfig.EXPIRED_TIME, TimeUnit.SECONDS);
 
     }
 
