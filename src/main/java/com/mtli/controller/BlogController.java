@@ -61,6 +61,39 @@ public class BlogController {
     }
 
     /**
+     * 修改博文
+     *
+     * @param blogId
+     * @param blogTitle
+     * @param blogBody
+     * @param tagId
+     * @return
+     */
+    @ApiOperation(value = "修改博文", notes = "博文id+博文标题+博文内容+博文标签")
+    @PreAuthorize("hasAuthority('USER')")
+    @PutMapping("/edit/{blogId}")
+    public Result updateBlog(@PathVariable Integer blogId, String blogTitle,
+                              String blogBody, Integer[] tagId) {
+
+        if (!formatUtil.checkStringNull(blogTitle, blogBody)) {
+            return Result.create(StatusCode.ERROR, "参数错误");
+        }
+
+        if (!formatUtil.checkPositive(tagId) || !formatUtil.checkPositive(blogId)) {
+            return Result.create(StatusCode.ERROR, "参数错误");
+        }
+
+        try {
+            blogService.updateBlog(blogId, blogTitle, blogBody, tagId);
+            return Result.create(StatusCode.OK, "修改成功");
+        } catch (RuntimeException e) {
+            return Result.create(StatusCode.ERROR, "修改失败" + e.getMessage());
+        } catch (JsonProcessingException e) {
+            return Result.create(StatusCode.SERVICEERROR, "服务异常");
+        }
+    }
+
+    /**
      * 上传图片
      *
      * @param file
@@ -220,37 +253,7 @@ public class BlogController {
         return Result.create(StatusCode.OK, "查询成功", pageResult);
     }
 
-    /**
-     * 修改博文
-     *
-     * @param blogId
-     * @param blogTitle
-     * @param blogBody
-     * @param tagId
-     * @return
-     */
-    @ApiOperation(value = "修改博文", notes = "博文id+博文标题+博文内容+博文标签")
-    @PreAuthorize("hasAuthority('USER')")
-    @PutMapping("/{blogId}")
-    public Result updateBlog(@PathVariable Integer blogId, String blogTitle, String blogBody, Integer[] tagId) {
 
-        if (!formatUtil.checkStringNull(blogTitle, blogBody)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
-        }
-
-        if (!formatUtil.checkPositive(tagId) || !formatUtil.checkPositive(blogId)) {
-            return Result.create(StatusCode.ERROR, "参数错误");
-        }
-
-        try {
-            blogService.updateBlog(blogId, blogTitle, blogBody, tagId);
-            return Result.create(StatusCode.OK, "修改成功");
-        } catch (RuntimeException e) {
-            return Result.create(StatusCode.ERROR, "修改失败" + e.getMessage());
-        } catch (JsonProcessingException e) {
-            return Result.create(StatusCode.SERVICEERROR, "服务异常");
-        }
-    }
 
     /**
      * 用户删除博文
